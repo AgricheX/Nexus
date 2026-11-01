@@ -23,7 +23,7 @@
     var p = []; for (var k in o) if (o[k]) p.push(k + '=' + encodeURIComponent(o[k]));
     history.replaceState(null, '', location.pathname + (p.length ? '?' + p.join('&') : '') + location.hash);
   }
-  function title(s) { document.title = s ? s + ' · Agriche Mods' : 'Agriche Mods · WorldBox & RimWorld mods'; }
+  function title(s) { document.title = s ? s + ' · Agriche Nexus' : 'Agriche Nexus · WorldBox & RimWorld mods'; }
   function ext(href, kids, cls) { return h('a', { class: cls || 'btn', href: href, target: '_blank', rel: 'noopener' }, kids); }
   function mods() { return AG.mods || []; }
   function gameName(g) { return (AG.GAMES[g] || {}).name || g; }
@@ -83,18 +83,25 @@
     main.appendChild(h('section', { class: 'hero' }, h('div', { class: 'wrap' },
       h('div', null,
         h('span', { class: 'tag acc' }, h('span', { class: 'dot' }), t('Mod hub', 'Central de mods')),
-        h('h1', { style: 'margin-top:18px' }, t('Mods for ', 'Mods para '), h('span', { class: 'grad', text: 'WorldBox' }), t(' and ', ' e '), h('span', { class: 'grad', text: 'RimWorld' })),
+        h('h1', { class: 'split', style: 'margin-top:18px' }, (t('Mods for|WorldBox and|RimWorld', 'Mods para|WorldBox e|RimWorld')).split('|').map(function (ln, i) { return h('span', { class: 'ln', style: '--i:' + i }, h('span', { text: ln })); })),
         h('p', { class: 'lead', text: t('Kaijus, devil fruits, isekai races, endless backrooms and whole civilizations. Every mod in one place, with direct downloads, guides and help.', 'Kaijus, akuma no mi, raças de isekai, backrooms sem fim e civilizações inteiras. Todos os mods num lugar só, com download direto, guias e ajuda.') }),
         h('div', { class: 'ctas' },
           h('a', { class: 'btn pri', href: '/Nexus/mods/' }, AG.icon('cube'), h('span', { text: t('Browse mods', 'Ver os mods') })),
           h('a', { class: 'btn', href: '/Nexus/guides/' }, AG.icon('book'), h('span', { text: t('How to install', 'Como instalar') })),
           discordBtn()),
         h('div', { class: 'stats' },
-          h('div', { class: 'stat' }, h('b', { text: all.length }), h('span', { text: 'Mods' })),
-          h('div', { class: 'stat' }, h('b', { text: '2' }), h('span', { text: t('Games', 'Jogos') })),
-          h('div', { class: 'stat' }, h('b', { text: '100%' }), h('span', { text: t('Free', 'Grátis') })),
+          h('div', { class: 'stat' }, h('b', { class: 'count', 'data-n': all.length, text: '0' }), h('span', { text: 'Mods' })),
+          h('div', { class: 'stat' }, h('b', { class: 'count', 'data-n': 2, text: '0' }), h('span', { text: t('Games', 'Jogos') })),
+          h('div', { class: 'stat' }, h('b', { class: 'count', 'data-n': 100, 'data-s': '%', text: '0%' }), h('span', { text: t('Free', 'Grátis') })),
           h('div', { class: 'stat' }, h('b', { text: 'EN · PT' }), h('span', { text: t('Languages', 'Idiomas') })))),
       gz && gz.scene ? AG.scene(gz.scene, 'Godzilla', t('Live preview', 'Prévia ao vivo')) : null)));
+    var row = function () { return h('div', { class: 'mq-row' }, all.map(function (m) { return h('a', { href: AG.modUrl(m) }, h('img', { src: m.icon, alt: '' }), h('span', { text: m.name }), h('i', { text: gameName(m.game) })); })); };
+    main.appendChild(h('div', { class: 'marquee', 'aria-hidden': 'true' }, h('div', { class: 'mq' }, row(), row())));
+    main.querySelectorAll('.count').forEach(function (el) {
+      var n = +el.getAttribute('data-n'), suf = el.getAttribute('data-s') || '', t0 = null;
+      function step(ts) { if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 1400); el.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))) + suf; if (k < 1) requestAnimationFrame(step); }
+      setTimeout(function () { requestAnimationFrame(step); }, 500);
+    });
 
     var games = h('div', { class: 'games' });
     Object.keys(AG.GAMES).forEach(function (g) {

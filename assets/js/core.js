@@ -133,6 +133,7 @@
     { id: 'credits', href: '/Nexus/credits/', t: ['Credits', 'Créditos'] }
   ];
 
+  function t2(a, b) { return AG.t(a, b); }
   function header(active) {
     var nav = h('nav', { class: 'nav' }, NAV.map(function (n) {
       return h('a', { href: n.href, class: n.id === active ? 'on' : null, text: AG.L(n.t) });
@@ -143,7 +144,7 @@
     var burger = h('button', { class: 'burger', 'aria-label': 'Menu', onclick: function () { nav.classList.toggle('open'); } }, AG.icon('menu'));
     burger.firstChild.style.width = '20px';
     return h('header', { class: 'top' }, h('div', { class: 'wrap' },
-      h('a', { class: 'brand', href: '/Nexus/' }, h('img', { class: 'logo', src: '/Nexus/assets/img/avatar.jpg', alt: 'Agriche' }), h('span', null, 'Agriche Mods', h('small', null, 'WorldBox · RimWorld'))),
+      h('a', { class: 'brand', href: '/Nexus/' }, h('img', { class: 'logo', src: '/Nexus/assets/img/avatar.jpg', alt: 'Agriche' }), h('span', null, 'Agriche Nexus', h('small', null, t2('Mods · Tools', 'Mods · Ferramentas')))),
       nav, h('a', { class: 'hdc', href: DISCORD, target: '_blank', rel: 'noopener', title: 'Discord', 'aria-label': 'Discord' }, AG.icon('discord')), burger, lang));
   }
 
@@ -152,7 +153,7 @@
     function col(title, list) { return h('div', null, h('h4', { text: title }), list); }
     return h('footer', { class: 'foot' }, h('div', { class: 'wrap' },
       h('div', null,
-        h('a', { class: 'brand', href: '/Nexus/' }, h('img', { class: 'logo', src: '/Nexus/assets/img/avatar.jpg', alt: 'Agriche' }), h('span', null, 'Agriche Mods')),
+        h('a', { class: 'brand', href: '/Nexus/' }, h('img', { class: 'logo', src: '/Nexus/assets/img/avatar.jpg', alt: 'Agriche' }), h('span', null, 'Agriche Nexus')),
         h('p', { style: 'margin-top:12px;max-width:380px', text: AG.t('Free mods made by fans, for fans. If anyone asks you for money to use them, it is a scam.', 'Mods gratuitos feitos de fã para fã. Se alguém pedir dinheiro para usar, é golpe.') })),
       col(AG.t('Mods', 'Mods'), mods.slice(0, 7).map(function (m) { return h('a', { href: AG.modUrl(m), text: m.name }); })),
       col(AG.t('Links', 'Links'), [
@@ -182,8 +183,19 @@
     var o = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -40px 0px' });
-    els.forEach(function (e) { o.observe(e); });
+    els.forEach(function (e) {
+      var sib = e.parentNode ? Array.prototype.indexOf.call(e.parentNode.children, e) : 0;
+      e.style.transitionDelay = Math.min(sib, 8) * 60 + 'ms';
+      o.observe(e);
+    });
   };
+  document.addEventListener('pointermove', function (ev) {
+    var el = ev.target.closest && ev.target.closest('.card,.panel,.feat,.spr');
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+    el.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+  }, { passive: true });
 
   AG.secHead = function (k, title, sub, right) {
     return h('div', { class: 'sec-h' }, h('div', null, k ? h('span', { class: 'k', text: k }) : null, h('h2', { text: title }), sub ? h('p', { text: sub }) : null), right || null);
