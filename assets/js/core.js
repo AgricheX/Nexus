@@ -143,8 +143,8 @@
     var burger = h('button', { class: 'burger', 'aria-label': 'Menu', onclick: function () { nav.classList.toggle('open'); } }, AG.icon('menu'));
     burger.firstChild.style.width = '20px';
     return h('header', { class: 'top' }, h('div', { class: 'wrap' },
-      h('a', { class: 'brand', href: '/Nexus/' }, h('span', { class: 'logo', text: 'A' }), h('span', null, 'Agriche Mods', h('small', null, 'WorldBox · RimWorld'))),
-      nav, burger, lang));
+      h('a', { class: 'brand', href: '/Nexus/' }, h('img', { class: 'logo', src: '/Nexus/assets/img/avatar.jpg', alt: 'Agriche' }), h('span', null, 'Agriche Mods', h('small', null, 'WorldBox · RimWorld'))),
+      nav, h('a', { class: 'hdc', href: DISCORD, target: '_blank', rel: 'noopener', title: 'Discord', 'aria-label': 'Discord' }, AG.icon('discord')), burger, lang));
   }
 
   function footer() {
@@ -152,7 +152,7 @@
     function col(title, list) { return h('div', null, h('h4', { text: title }), list); }
     return h('footer', { class: 'foot' }, h('div', { class: 'wrap' },
       h('div', null,
-        h('a', { class: 'brand', href: '/Nexus/' }, h('span', { class: 'logo', text: 'A' }), h('span', null, 'Agriche Mods')),
+        h('a', { class: 'brand', href: '/Nexus/' }, h('img', { class: 'logo', src: '/Nexus/assets/img/avatar.jpg', alt: 'Agriche' }), h('span', null, 'Agriche Mods')),
         h('p', { style: 'margin-top:12px;max-width:380px', text: AG.t('Free mods made by fans, for fans. If anyone asks you for money to use them, it is a scam.', 'Mods gratuitos feitos de fã para fã. Se alguém pedir dinheiro para usar, é golpe.') })),
       col(AG.t('Mods', 'Mods'), mods.slice(0, 7).map(function (m) { return h('a', { href: AG.modUrl(m), text: m.name }); })),
       col(AG.t('Links', 'Links'), [

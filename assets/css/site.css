@@ -328,3 +328,10 @@ code{font:500 13px var(--mono);background:rgba(255,255,255,.05);border:1px solid
 .notice svg{width:20px;height:20px;flex:0 0 20px;margin-top:2px;color:var(--warn)}
 .notice.info svg{color:var(--acc)}
 .val{word-break:break-all}
+img.logo{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid var(--line2);display:block}
+.hdc{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line2);border-radius:9px;color:var(--mute)}
+.hdc:hover{color:var(--acc);border-color:rgba(var(--acc-rgb),.6)}
+.hdc svg{width:18px;height:18px}
+@media (max-width:920px){.hdc{margin-left:auto}.burger{margin-left:0}}
+.brand img.logo{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:none;background:none}
+@media (max-width:920px){.top .brand small{display:none}}
