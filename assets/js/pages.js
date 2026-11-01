@@ -372,7 +372,20 @@
     toc.push(['install', t('Install', 'Instalar')], ['help', t('Help', 'Ajuda')]);
     var sec = h('section', { class: 'mbody' }, h('div', { class: 'wrap' }));
     var w = sec.firstChild;
-    w.appendChild(h('nav', { class: 'toc' }, toc.map(function (x) { return h('a', { href: '#' + x[0], text: x[1] }); })));
+    var tocEl = h('nav', { class: 'toc' }, toc.map(function (x) { return h('a', { href: '#' + x[0], text: x[1], 'data-k': x[0] }); }));
+    w.appendChild(tocEl);
+    setTimeout(function () {
+      if (!('IntersectionObserver' in window)) return;
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          tocEl.querySelectorAll('a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-k') === e.target.id); });
+          var a = tocEl.querySelector('a.on');
+          if (a) tocEl.scrollTo({ left: a.offsetLeft - tocEl.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+        });
+      }, { rootMargin: '-130px 0px -60% 0px' });
+      toc.forEach(function (x) { var el = document.getElementById(x[0]); if (el) io.observe(el); });
+    }, 300);
 
     w.appendChild(h('div', { class: 'group', id: 'features' }, h('h3', { text: t('What it adds', 'O que o mod adiciona') }),
       h('div', { class: 'feats' }, (m.feats || []).map(function (f) { return h('div', { class: 'panel feat reveal' }, h('div', { class: 'ic' }, AG.icon(f.i)), h('p', { text: L(f.d) })); }))));
