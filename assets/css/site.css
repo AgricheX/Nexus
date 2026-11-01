@@ -444,3 +444,9 @@ h1.split .ln:nth-child(3)>span{color:var(--mute)}
 .gal .gi:hover{border-color:#4a4a52}
 .gal img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .4s}
 .gal .gi:hover img{transform:scale(1.03)}
+
+.sfgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.sfgal .gi{display:block;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;background:var(--panel);text-decoration:none;transition:border-color .2s}
+.sfgal .gi:hover{border-color:#4a4a52}
+.sfgal img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top;display:block}
+.sfgal span{display:block;padding:10px 14px;font:500 12px var(--mono);color:var(--mute)}

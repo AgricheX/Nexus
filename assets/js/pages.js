@@ -129,6 +129,14 @@
       h('div', { class: 'ctas' },
         h('a', { class: 'btn pri', href: '/Nexus/neo-mod-maker/' }, AG.icon('spark'), h('span', { text: t('Learn more', 'Saiba mais') })),
         ext('https://agrichex.github.io/Neo-Mod-Maker/', [AG.icon('external'), h('span', { text: t('Open it', 'Abrir') })]))))));
+    main.appendChild(h('section', null, h('div', { class: 'wrap' }, h('div', { class: 'panel hud cta reveal' },
+      h('div', null,
+        h('span', { class: 'k', text: t('Stellaris tool', 'Ferramenta para Stellaris') }),
+        h('h2', { text: 'Stellar Forge' }),
+        h('p', { class: 'mute', text: t('Paint, type or roll a galaxy for Stellaris in your browser, then export a mod ready to play.', 'Pinte, digite ou sorteie uma galáxia para Stellaris no navegador e exporte um mod pronto para jogar.') })),
+      h('div', { class: 'ctas' },
+        h('a', { class: 'btn pri', href: '/Nexus/stellar-forge/' }, AG.icon('planet'), h('span', { text: t('Learn more', 'Saiba mais') })),
+        ext('https://agrichex.github.io/Stellar-Forge/', [AG.icon('external'), h('span', { text: t('Open it', 'Abrir') })]))))));
   };
 
   P.mods = function (main) {
@@ -536,13 +544,54 @@
       h('div', { class: 'tip', style: 'margin-top:22px' }, h('b', { text: t('Your mods from Neo Mod Maker: ', 'Seus mods do Neo Mod Maker: ') }), t('share them in the your-mods forum channel on Discord.', 'compartilhe no canal de fórum your-mods do Discord.')))));
   };
 
+  P.sf = function (main) {
+    title('Stellar Forge');
+    var url = 'https://agrichex.github.io/Stellar-Forge/';
+    var F = [
+      ['spark', ['Shapes', 'Formas'], ['Freehand, circle, ellipse, rectangle, line, polygon, star, ring and spiral, each with paint and erase versions.', 'Mão livre, círculo, elipse, retângulo, linha, polígono, estrela, anel e espiral, todas com versão de pintar e apagar.']],
+      ['chat', ['Typed galaxies', 'Galáxias digitadas'], ['Type letters, numbers, words or emoji and they become a galaxy in that exact shape.', 'Digite letras, números, palavras ou emoji e eles viram uma galáxia nesse formato.']],
+      ['cube', ['Transform box', 'Caixa de transformação'], ['Move, resize, rotate and flip text, emoji and templates freely before you apply them.', 'Mova, redimensione, gire e espelhe textos, emoji e modelos livremente antes de aplicar.']],
+      ['shield', ['Layers', 'Camadas'], ['Systems, spawns, hyperlanes, wormholes, nebulas and more. Hide, lock or solo any layer.', 'Sistemas, spawns, hiperpistas, wormholes, nebulosas e mais. Esconda, trave ou isole qualquer camada.']],
+      ['globe', ['Templates', 'Modelos'], ['Milky Way, Andromeda and galaxies inspired by Star Wars, Star Trek, Warhammer 40k, Mass Effect and more.', 'Via Láctea, Andrômeda e galáxias inspiradas em Star Wars, Star Trek, Warhammer 40k, Mass Effect e mais.']],
+      ['star', ['100% random', '100% aleatória'], ['One click forges a new galaxy from a seed. The same seed always gives the same map.', 'Um clique forja uma galáxia nova a partir de uma semente. A mesma semente sempre gera o mesmo mapa.']],
+      ['bolt', ['Command bar', 'Barra de comandos'], ['Ctrl K and type things like spiral arms=3 stars=800, in English or Portuguese.', 'Ctrl K e digite coisas como espiral bracos=3 estrelas=800, em inglês ou português.']],
+      ['planet', ['System Forge', 'System Forge'], ['Build solar systems planet by planet, with moons, rings, belts and companion stars.', 'Monte sistemas solares planeta por planeta, com luas, anéis, cinturões e estrelas companheiras.']],
+      ['book', ['Import from a save', 'Importar de um save'], ['Open a .sav and turn the galaxy of a campaign into an editable project.', 'Abra um .sav e transforme a galáxia de uma campanha num projeto editável.']],
+      ['download', ['One-click mod', 'Mod em um clique'], ['Download a ready zip with descriptor, map and thumbnail. Open it again later to release the next version.', 'Baixe um zip pronto com descriptor, mapa e miniatura. Abra de novo depois para lançar a próxima versão.']],
+      ['sliders', ['Simple by default', 'Simples por padrão'], ['The editor shows only what you need. Advanced mode unlocks every setting.', 'O editor mostra só o necessário. O modo avançado libera todas as configurações.']],
+      ['users', ['English and Portuguese', 'Inglês e português'], ['The whole interface, guides and tutorials in both languages.', 'Interface, guias e tutoriais completos nos dois idiomas.']]
+    ];
+    var S = [['editor', ['Editor', 'Editor']], ['transform', ['Text and emoji with a transform box', 'Texto e emoji com caixa de transformação']], ['command', ['Command bar', 'Barra de comandos']], ['system_forge', ['System Forge', 'System Forge']],
+      ['save_import', ['Import from a save', 'Importar de um save']], ['random', ['Random galaxy', 'Galáxia aleatória']], ['layers', ['Layers', 'Camadas']], ['export', ['Export', 'Exportar']], ['export_details', ['Mod details', 'Detalhes do mod']], ['home', ['Home page', 'Página inicial']], ['forum', ['Forum with guides', 'Fórum com guias']]];
+    var steps = [
+      [t('Subscribe to Paint a Galaxy on the Steam Workshop. Your map uses it as a base.', 'Inscreva-se no Paint a Galaxy na Oficina da Steam. Seu mapa usa ele como base.')],
+      [t('Extract the zip from Stellar Forge into Documents\\Paradox Interactive\\Stellaris\\mod.', 'Extraia o zip do Stellar Forge em Documentos\\Paradox Interactive\\Stellaris\\mod.')],
+      [t('In the Paradox launcher, enable Paint a Galaxy and your mod, with your mod loading after it.', 'No launcher da Paradox, ative o Paint a Galaxy e o seu mod, com o seu mod carregando depois dele.')],
+      [t('Start a new game and pick your galaxy in the galaxy shape list.', 'Comece um jogo novo e escolha sua galáxia na lista de formatos de galáxia.')]
+    ];
+    main.appendChild(h('section', { class: 'mhero' }, h('div', { class: 'wrap' },
+      h('div', null,
+        h('span', { class: 'tag acc' }, h('span', { class: 'dot' }), t('Free tool · Stellaris', 'Ferramenta gratuita · Stellaris')),
+        h('h1', { style: 'margin-top:16px', text: 'Stellar Forge' }),
+        h('p', { class: 'lead', text: t('A galaxy map maker for Stellaris that runs in your browser. Paint where you want stars, type a shape, word or emoji, pick a famous galaxy or roll a random one, then export a mod that is ready to play.', 'Um criador de mapas de galáxia para Stellaris que roda no navegador. Pinte onde quer estrelas, digite uma forma, palavra ou emoji, escolha uma galáxia famosa ou sorteie uma aleatória, e exporte um mod pronto para jogar.') }),
+        h('div', { class: 'ctas' }, ext(url, [AG.icon('external'), h('span', { text: t('Open Stellar Forge', 'Abrir o Stellar Forge') })], 'btn pri'), ext('https://github.com/AgricheX/Stellar-Forge', [AG.icon('github'), h('span', { text: 'GitHub' })]), discordBtn())),
+      h('a', { class: 'stage hud shotlink', href: url, target: '_blank', rel: 'noopener' }, h('img', { class: 'shot', src: '/Nexus/assets/img/sf/editor.jpg', alt: 'Stellar Forge' })))));
+    main.appendChild(h('section', null, h('div', { class: 'wrap' }, AG.secHead(t('Features', 'Recursos'), t('What you can do', 'O que dá para fazer')),
+      h('div', { class: 'feats' }, F.map(function (f) { return h('div', { class: 'panel feat reveal' }, h('div', { class: 'ic' }, AG.icon(f[0])), h('div', null, h('h3', { text: L(f[1]) }), h('p', { text: L(f[2]) }))); })))));
+    main.appendChild(h('section', null, h('div', { class: 'wrap' }, AG.secHead(t('Screenshots', 'Imagens'), t('A look inside', 'Por dentro')),
+      h('div', { class: 'sfgal' }, S.map(function (x) { return h('a', { class: 'gi reveal', href: '/Nexus/assets/img/sf/' + x[0] + '.jpg', target: '_blank', rel: 'noopener' }, h('img', { src: '/Nexus/assets/img/sf/' + x[0] + '.jpg', alt: L(x[1]), loading: 'lazy' }), h('span', { text: L(x[1]) })); })))));
+    main.appendChild(h('section', null, h('div', { class: 'wrap' }, AG.secHead(t('Install', 'Instalar'), t('Playing your map', 'Jogando o seu mapa')),
+      h('div', { class: 'panel', style: 'padding:6px 22px' }, h('ol', { class: 'steps', style: 'border-top:0' }, steps.map(function (x) { return h('li', { text: x[0] }); }))),
+      h('div', { class: 'tip', style: 'margin-top:18px' }, t('Stellar Forge is an improved fork of Paint a Galaxy by Michael Moore (MIT). Stellaris is a trademark of Paradox Interactive; this is a fan project, not affiliated with Paradox.', 'O Stellar Forge é um fork melhorado do Paint a Galaxy, de Michael Moore (MIT). Stellaris é marca da Paradox Interactive; este é um projeto de fã, sem ligação com a Paradox.')))));
+  };
+
   P.credits = function (main) {
     title(t('Credits', 'Créditos'));
     function person(n, r, d) { return h('div', { class: 'panel credit reveal' }, h('span', { text: r }), h('b', { text: n }), d ? h('p', { text: d }) : null); }
     main.appendChild(h('section', { class: 'mhead' }, h('div', { class: 'wrap' },
       AG.secHead(t('Credits', 'Créditos'), t('Who makes this', 'Quem faz isso')),
       h('div', { class: 'credits' },
-        person('Agriche (AgricheX)', t('Owner and founder', 'Dona e fundadora'), t('Creator of every mod on this site and of Neo Mod Maker, and direction of every decision of the project.', 'Criadora de todos os mods deste site e do Neo Mod Maker, e direção de todas as decisões do projeto.')),
+        person('Agriche (AgricheX)', t('Owner and founder', 'Dona e fundadora'), t('Creator of every mod on this site, of Neo Mod Maker and Stellar Forge, and direction of every decision of the project.', 'Criadora de todos os mods deste site, do Neo Mod Maker e do Stellar Forge, e direção de todas as decisões do projeto.')),
         person('Claude (Anthropic)', t('Co-creator', 'Co-criador'), t('Built this site and helped update the code of the mods, in partnership with the founder.', 'Construiu este site e ajudou a atualizar o código dos mods, em parceria com a fundadora.')),
         person('Loctusz Ofc', t('Sprite artist', 'Artista dos sprites'), t('Made most of the art of the original mods. Thank you for all the work on the sprites.', 'Fez a maior parte da arte dos mods originais. Obrigado por todo o trabalho com os sprites.'))),
       h('p', { class: 'mute', style: 'margin-top:16px', text: t('Thanks also to everyone else who made art for the mods.', 'Obrigado também a todas as outras pessoas que fizeram arte para os mods.') }),
@@ -555,6 +604,7 @@
         h('div', { class: 'panel md' },
           h('p', null, h('b', { text: 'WorldBox © Maxim Karpenko / MakoMako' }), ' · ', h('a', { href: 'https://www.superworldbox.com/', target: '_blank', rel: 'noopener', text: 'superworldbox.com' })),
           h('p', null, h('b', { text: 'RimWorld © Ludeon Studios' }), ' · ', h('a', { href: 'https://rimworldgame.com/', target: '_blank', rel: 'noopener', text: 'rimworldgame.com' })),
+          h('p', null, h('b', { text: 'Stellaris © Paradox Interactive' }), ' · ', t('Stellar Forge is a fork of ', 'O Stellar Forge é um fork do '), h('a', { href: 'https://github.com/oatmealproblem/paint-a-galaxy', target: '_blank', rel: 'noopener', text: 'Paint a Galaxy' }), t(' by Michael Moore (MIT).', ', de Michael Moore (MIT).')),
           h('p', { text: t('These are independent fan-made mods, not affiliated with or endorsed by the game developers. Characters and franchises shown in the mods belong to their owners.', 'Estes são mods independentes feitos por fãs, sem ligação oficial com os desenvolvedores dos jogos. Personagens e franquias dos mods pertencem aos seus donos.') }),
           h('p', { text: t('Fonts: Inter and JetBrains Mono, via Google Fonts.', 'Fontes: Inter e JetBrains Mono, via Google Fonts.') }))),
       h('div', { class: 'group' }, h('h3', { text: t('Bugs and questions', 'Bugs e dúvidas') }), discordBtn('discord.gg/s3EbgNSsJW')))));

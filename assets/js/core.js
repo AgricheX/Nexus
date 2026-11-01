@@ -115,6 +115,7 @@
     { id: 'guides', href: '/Nexus/guides/', t: ['Guides', 'Guias'] },
     { id: 'forum', href: '/Nexus/forum/', t: ['Help forum', 'Fórum de ajuda'] },
     { id: 'nmm', href: '/Nexus/neo-mod-maker/', t: ['Neo Mod Maker', 'Neo Mod Maker'] },
+    { id: 'sf', href: '/Nexus/stellar-forge/', t: ['Stellar Forge', 'Stellar Forge'] },
     { id: 'credits', href: '/Nexus/credits/', t: ['Credits', 'Créditos'] }
   ];
 
@@ -147,6 +148,7 @@
         h('a', { href: DISCORD, target: '_blank', rel: 'noopener', text: 'Discord: Agriche Community' }),
         h('a', { href: GH, target: '_blank', rel: 'noopener', text: 'GitHub: AgricheX' }),
         h('a', { href: '/Nexus/neo-mod-maker/', text: 'Neo Mod Maker' }),
+        h('a', { href: '/Nexus/stellar-forge/', text: 'Stellar Forge' }),
         h('a', { href: '/Nexus/credits/', text: AG.t('Credits', 'Créditos') })
       ]),
       h('div', { class: 'legal' },

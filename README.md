@@ -19,6 +19,7 @@ English first, português do Brasil logo abaixo.
 - **Guides** for installing WorldBox and RimWorld mods.
 - **A help forum** with topics for each mod.
 - **Neo Mod Maker**, my free tool for creating WorldBox mods in your browser.
+- **Stellar Forge**, my galaxy map maker for Stellaris that exports a ready-to-play mod.
 - English and Brazilian Portuguese.
 
 ### Mods
@@ -50,6 +51,7 @@ Minha central de tudo que eu faço: mods de jogos, ferramentas como o Neo Mod Ma
 - **Guias** de instalação de mods de WorldBox e RimWorld.
 - **Um fórum de ajuda** com tópicos de cada mod.
 - **Neo Mod Maker**, minha ferramenta gratuita para criar mods de WorldBox no navegador.
+- **Stellar Forge**, meu criador de mapas de galáxia para Stellaris que exporta um mod pronto para jogar.
 - Inglês e português do Brasil.
 
 ### Ajuda
@@ -60,4 +62,4 @@ Tudo que eu faço é gratuito, de fã para fã. Se alguém pedir dinheiro para u
 
 ---
 
-WorldBox © Maxim Karpenko / MakoMako. RimWorld © Ludeon Studios. These are independent fan-made projects, not affiliated with or endorsed by the game developers.
+WorldBox © Maxim Karpenko / MakoMako. RimWorld © Ludeon Studios. Stellaris © Paradox Interactive. These are independent fan-made projects, not affiliated with or endorsed by the game developers.
