@@ -391,3 +391,52 @@ h1.split .ln:nth-child(3)>span{color:var(--mute)}
 .feats .feat:hover{border-color:#4a4a52}
 .group>h3{padding-left:14px}
 .group>h3:before{width:3px}
+.aic{display:inline-block;flex:0 0 auto;background-repeat:no-repeat;image-rendering:pixelated}
+.cfgn{display:inline-flex;align-items:center;gap:10px}
+.cfil{display:grid;gap:8px;margin-bottom:16px}
+.frow{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.frow .fl{font:500 10px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.08em;width:70px}
+.frow .chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px}
+.frow .search{margin-left:0;min-width:260px}
+.ccount{font:500 11px var(--mono);color:var(--dim);margin-left:10px}
+.cgrid{display:grid;gap:8px}
+.cgrid.v-mini{grid-template-columns:repeat(auto-fill,minmax(118px,1fr))}
+.cgrid.v-card{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.cgrid.v-unit{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.cgrid.v-ladder{grid-template-columns:1fr}
+.ci.vw-mini{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px 10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);text-align:center;transition:border-color .15s}
+.ci.vw-mini:hover{border-color:#4a4a52}
+.ci.vw-mini .cbox{height:56px;display:grid;place-items:center}
+.ci.vw-mini .cn{font-size:12px;color:var(--mute);line-height:1.3}
+.ci.vw-mini i{position:absolute;top:6px;font:500 9px var(--mono);font-style:normal;color:var(--dim)}
+.ci.vw-mini i.lv{right:7px}.ci.vw-mini i.rare{left:7px;color:var(--warn)}
+.ci.vw-card,.ci.vw-ladder{display:flex;gap:14px;align-items:center;padding:12px 14px}
+.ci.vw-card .cbox,.ci.vw-ladder .cbox{flex:0 0 72px;height:72px;display:grid;place-items:center;border-radius:4px;border:1px solid var(--line);background:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1.2px) 0 0/14px 14px,#0f0f12;overflow:hidden}
+.ci h4{margin:0 0 3px;font:600 14.5px var(--head);letter-spacing:-.01em}
+.ci p{margin:0;color:var(--mute);font-size:13px;line-height:1.45}
+.ci.vw-unit{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.ci.vw-unit .cbox{height:120px;display:grid;place-items:center;border-bottom:1px solid var(--line);background:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1.2px) 0 0/14px 14px,#0f0f12}
+.ci.vw-unit .cb{padding:12px 14px 14px}
+.cst{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.cst span{font:500 11px var(--mono);border:1px solid var(--line2);border-radius:3px;padding:2px 6px;color:var(--text)}
+.cst i{font-style:normal;color:var(--dim);margin-right:5px}
+.cvar{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.cvar button{font:500 10px var(--mono);text-transform:uppercase;border:1px solid var(--line2);background:none;color:var(--mute);border-radius:3px;padding:3px 6px;cursor:pointer}
+.cvar button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.cmore{display:flex;justify-content:center;margin-top:14px}
+@media (max-width:920px){.cgrid.v-card,.cgrid.v-unit{grid-template-columns:1fr}.frow .fl{width:100%}}
+.moves button{font:400 12px var(--body);color:var(--text);border:1px solid var(--line2);background:none;padding:3px 8px;border-radius:3px;cursor:pointer;transition:.15s}
+.moves button:hover{border-color:var(--text)}
+.moves button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.moves button:before{content:"\25B6";font-size:7px;margin-right:6px;opacity:.6;vertical-align:1px}
+.kbtn{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);flex-wrap:wrap}
+.kbtn .fl{font:500 10px var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.kb{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mute)}
+.kb img{width:28px;height:28px;image-rendering:pixelated;border:1px solid var(--line);border-radius:4px}
+.kj .anims{flex-wrap:wrap}
+.kj .view{height:230px;padding-bottom:60px}
+.gal{columns:3 280px;column-gap:10px}
+.gal .gi{display:block;margin-bottom:10px;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;break-inside:avoid;transition:border-color .2s}
+.gal .gi:hover{border-color:#4a4a52}
+.gal img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .4s}
+.gal .gi:hover img{transform:scale(1.03)}

@@ -155,7 +155,7 @@
     draw();
   };
 
-  var ANIM = { walk: ['Walk', 'Andar'], fly: ['Fly', 'Voar'], swim: ['Swim', 'Nadar'], sleep: ['Sleep', 'Dormir'], power: ['Power', 'Poder'] };
+  var ANIM = { walk: ['Walk', 'Andar'], idle: ['Idle', 'Parado'], fly: ['Fly', 'Voar'], swim: ['Swim', 'Nadar'], attack: ['Attack', 'Ataque'], power: ['Power', 'Poder'], hurt: ['Hurt', 'Dano'], sleep: ['Sleep', 'Dormir'], death: ['Death', 'Morte'] };
   var TEMPER = { calm: ['Calm', 'Calmo'], territorial: ['Territorial', 'Territorial'], hunter: ['Hunter', 'Caçador'] };
 
   function kaijuCard(k) {
@@ -163,14 +163,20 @@
     k.forms.forEach(function (f, i) { if (f.id === 'main' || f.id === 'blue') fi = i; });
     var view = h('div', { class: 'view' }), forms = h('div', { class: 'forms' }), anims = h('div', { class: 'anims' }), holder = h('div', { class: 'hold' });
     view.appendChild(holder); view.appendChild(forms); view.appendChild(anims);
+    var mv = h('div', { class: 'moves' });
     function draw() {
       var f = k.forms[fi];
       if (!f.a[an]) an = 'walk';
       holder.innerHTML = '';
-      holder.appendChild(spr(f.a[an], 290, 128, L(k.n) + ' ' + L(ANIM[an])));
+      holder.appendChild(spr(f.a[an], 290, 128, L(k.n)));
+      mv.innerHTML = '';
+      k.moves.forEach(function (x) {
+        var main = k.forms.filter(function (q) { return q.a[x.a]; })[0];
+        mv.appendChild(main ? h('button', { class: an === x.a ? 'on' : null, title: t('Play this move', 'Ver este golpe'), onclick: function () { fi = k.forms.indexOf(main); an = x.a; draw(); } }, L(x)) : h('span', { text: L(x) }));
+      });
       forms.innerHTML = ''; anims.innerHTML = '';
       if (k.forms.length > 1) k.forms.forEach(function (x, i) { forms.appendChild(h('button', { class: i === fi ? 'on' : null, text: L(x.n), onclick: function () { fi = i; draw(); } })); });
-      Object.keys(ANIM).forEach(function (a) { if (f.a[a]) anims.appendChild(h('button', { class: a === an ? 'on' : null, text: L(ANIM[a]), onclick: function () { an = a; draw(); } })); });
+      Object.keys(ANIM).forEach(function (a) { if (f.a[a] && (a !== 'idle' || !f.a.sleep || true)) anims.appendChild(h('button', { class: a === an ? 'on' : null, text: L(ANIM[a]), onclick: function () { an = a; draw(); } })); });
     }
     draw();
     return h('div', { class: 'panel kj' + (k.star ? ' star hud' : ''), 'data-temper': k.temper },
@@ -179,7 +185,8 @@
         h('span', { class: 'tag t-' + k.temper, text: L(TEMPER[k.temper]) })),
       view,
       h('div', { class: 'bd' }, k.wild && L(k.wild) ? h('p', { text: L(k.wild) }) : null,
-        h('div', { class: 'moves' }, k.moves.map(function (x) { return h('span', { text: L(x) }); }))));
+        mv,
+        k.btn && k.btn.length ? h('div', { class: 'kbtn' }, h('span', { class: 'fl', text: t('Buttons', 'Botões') }), k.btn.map(function (b, i) { return h('span', { class: 'kb' }, h('img', { src: b, alt: '' }), i ? t('Wild', 'Selvagem') : t('Controlled', 'Controlado')); })) : null));
   }
 
   function kaijuSection(sec) {
@@ -210,6 +217,66 @@
           return h('tr', null, h('td', null, L(c.k).split(/\s*\/\s*|\s*,\s*/).map(function (x, i) { return [i ? ' ' : null, h('kbd', { text: x })]; })), h('td', { text: L(c.d) }));
         })))),
       G.mobile ? h('div', { class: 'tip' }, h('b', { text: t('On a touch screen: ', 'Na tela de toque: ') }), L(G.mobile)) : null));
+  }
+
+
+  function aicon(at, i, size) {
+    var k = size / at.cw, el = h('span', { class: 'aic', role: 'img' });
+    el.style.cssText = 'width:' + size + 'px;height:' + (at.ch * k) + 'px;background-image:url("' + at.s + '");background-size:' + (at.cols * at.cw * k) + 'px auto;background-position:-' + ((i % at.cols) * at.cw * k) + 'px -' + (Math.floor(i / at.cols) * at.ch * k) + 'px';
+    return el;
+  }
+  var ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+  function galBlock(g) {
+    return h('div', { class: 'group', id: g.id }, h('h3', null, L(g.t), h('span', { class: 'n', text: g.items.length })), g.d ? h('p', { text: L(g.d) }) : null,
+      h('div', { class: 'gal' }, g.items.map(function (it) { return h('a', { href: it.img, target: '_blank', rel: 'noopener', class: 'gi', style: 'aspect-ratio:' + it.w + '/' + it.h }, h('img', { src: it.img, alt: '', loading: 'lazy' })); })));
+  }
+  function catBlock(g, at) {
+    var view = g.view || 'card', st = { q: '' }, shown = g.page || 1e9;
+    (g.filters || []).forEach(function (f) { st[f.k] = f.def || null; });
+    var bar = h('div', { class: 'cfil' }), grid = h('div', { class: 'cgrid v-' + view }), more = h('div', { class: 'cmore' }), cnt = h('span', { class: 'ccount' });
+    function art(it, big) {
+      if (it.s) return spr(it.s, big ? 150 : 96, big ? 110 : 72, L(it.n));
+      if (it.ic != null && at) return aicon(at, it.ic, view === 'mini' ? 42 : 56);
+      return null;
+    }
+    function itemEl(it) {
+      if (view === 'mini') return h('div', { class: 'ci vw-mini', title: L(it.n) + (it.d ? ' · ' + L(it.d) : '') }, h('div', { class: 'cbox' }, art(it)), h('span', { class: 'cn', text: L(it.n) }), it.lv > 1 ? h('i', { class: 'lv', text: ROMAN[1] + '–' + ROMAN[it.lv] }) : null, it.rare ? h('i', { class: 'rare', text: t('Rare', 'Rara') }) : null);
+      var box = h('div', { class: 'cbox' }, art(it, view === 'unit'));
+      var vb = null;
+      if (it.v) vb = h('div', { class: 'cvar' }, it.v.map(function (v, k) {
+        return h('button', { class: k ? null : 'on', text: L(v.n), onclick: function (e) { box.innerHTML = ''; box.appendChild(spr(v.s, 96, 72, L(it.n))); vb.querySelectorAll('button').forEach(function (b) { b.classList.remove('on'); }); e.target.classList.add('on'); } });
+      }));
+      return h('div', { class: 'panel ci vw-' + view }, box, h('div', { class: 'cb' }, h('h4', { text: L(it.n) }), it.d ? h('p', { text: L(it.d) }) : null,
+        it.st ? h('div', { class: 'cst' }, it.st.map(function (x) { return h('span', null, h('i', { text: L(x[0]) }), String(x[1])); })) : null, vb));
+    }
+    function list() {
+      return g.items.filter(function (it) {
+        for (var k in st) { if (k === 'q' || !st[k]) continue; if (!it.tg || it.tg[k] !== st[k]) return false; }
+        return !st.q || L(it.n).toLowerCase().indexOf(st.q) >= 0;
+      });
+    }
+    function fill() {
+      var l = list(); grid.innerHTML = ''; more.innerHTML = '';
+      l.slice(0, shown).forEach(function (it) { grid.appendChild(itemEl(it)); });
+      cnt.textContent = l.length + ' / ' + g.items.length;
+      if (l.length > shown) more.appendChild(h('button', { class: 'btn', onclick: function () { shown += g.page; fill(); } }, h('span', { text: t('Show more', 'Mostrar mais') + ' (' + (l.length - shown) + ')' })));
+    }
+    function drawBar() {
+      bar.innerHTML = '';
+      (g.filters || []).forEach(function (f) {
+        var row = h('div', { class: 'frow' }, h('span', { class: 'fl', text: L(f.t) }));
+        var all = h('button', { class: 'chip' + (!st[f.k] ? ' on' : ''), text: t('All', 'Todos'), onclick: function () { st[f.k] = null; shown = g.page || 1e9; drawBar(); fill(); } });
+        if (!f.def) row.appendChild(all);
+        f.o.forEach(function (o) {
+          row.appendChild(h('button', { class: 'chip' + (st[f.k] === o[0] ? ' on' : ''), onclick: function () { st[f.k] = st[f.k] === o[0] && !f.def ? null : o[0]; shown = g.page || 1e9; drawBar(); fill(); } },
+            o[2] != null && at ? aicon(at, o[2], 18) : null, L(o[1])));
+        });
+        bar.appendChild(row);
+      });
+      if (g.search || g.items.length > 30) bar.appendChild(h('div', { class: 'frow' }, h('input', { class: 'search', type: 'search', value: st.q, placeholder: t('Search', 'Buscar') + ' ' + L(g.t).toLowerCase(), oninput: function (e) { st.q = e.target.value.toLowerCase(); shown = g.page || 1e9; fill(); } }), cnt));
+    }
+    drawBar(); fill();
+    return h('div', { class: 'group', id: g.id }, h('h3', null, L(g.t), h('span', { class: 'n', text: g.items.length })), g.d ? h('p', { text: L(g.d) }) : null, bar, grid, more);
   }
 
   function groupBlock(g) {
@@ -313,7 +380,7 @@
       kaijuSection(w);
       if (m.hero) w.appendChild(h('div', { class: 'group reveal' }, h('h3', { text: t('In game', 'No jogo') }), h('div', { class: 'stage hud wide' }, h('img', { class: 'shot', src: m.hero, alt: 'Godzilla' }))));
     }
-    (m.groups || []).forEach(function (g) { w.appendChild(groupBlock(g)); });
+    (m.groups || []).forEach(function (g) { w.appendChild(g.kind === 'cat' ? catBlock(g, m.atlas) : g.kind === 'gallery' ? galBlock(g) : groupBlock(g)); });
     if (m.eras) w.appendChild(h('div', { class: 'group reveal', id: 'eras' }, h('h3', null, t('Eras', 'Eras'), h('span', { class: 'n', text: m.eras.length })),
       h('p', { text: t('Kingdoms research their way through every era, from stone tools to the space age.', 'Os reinos pesquisam passando por todas as eras, das ferramentas de pedra à era espacial.') }),
       h('div', { class: 'eras' }, m.eras.map(function (e, i) { return h('span', { class: 'era' }, h('i', { text: String(i + 1).padStart(2, '0') }), L(e)); }))));
@@ -327,7 +394,7 @@
         var hasD = g.rows.some(function (r) { return L(r.d) && L(r.d) !== L(r.n); });
         return h('div', { class: 'panel cfg' }, h('h4', { text: L(g.g) }), h('table', { class: 't' },
           h('thead', null, h('tr', null, h('th', { text: t('Setting', 'Opção') }), h('th', { text: t('Default', 'Padrão') }), hasD ? h('th', { text: t('What it does', 'O que faz') }) : null)),
-          h('tbody', null, g.rows.map(function (r) { return h('tr', null, h('td', null, h('b', { text: L(r.n) })), h('td', null, h('span', { class: 'val', text: L(r.v) })), hasD ? h('td', { class: 'mute', text: L(r.d) !== L(r.n) ? L(r.d) : '' }) : null); }))));
+          h('tbody', null, g.rows.map(function (r) { return h('tr', null, h('td', null, h('span', { class: 'cfgn' }, r.ic != null && m.atlas ? aicon(m.atlas, r.ic, 28) : null, h('b', { text: L(r.n) }))), h('td', null, h('span', { class: 'val', text: L(r.v) })), hasD ? h('td', { class: 'mute', text: L(r.d) !== L(r.n) ? L(r.d) : '' }) : null); }))));
       })));
     w.appendChild(h('div', { class: 'group', id: 'install' }, h('h3', { text: t('How to install', 'Como instalar') }),
       h('div', { class: 'dl panel hud' }, installSteps(m), h('div', { class: 'dlc' }, AG.dlButton(m, true), h('span', { class: 'mute mono', text: m.zip + '.zip · v' + m.ver })))));
