@@ -276,8 +276,8 @@ code{font:500 13px var(--mono);background:var(--panel2);border:1px solid var(--l
 .cta .k{color:var(--dim);display:block;margin-bottom:12px}
 .cta .ctas{display:flex;gap:10px;flex-wrap:wrap}
 
-.credits{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--rad);overflow:hidden}
-.credit{display:grid;gap:4px;padding:20px;border:0;border-radius:0;background:var(--bg)}
+.credits{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.credit{display:grid;align-content:start;gap:4px;padding:20px;border:1px solid var(--line);border-radius:var(--rad);background:var(--panel)}
 .credit b{font:600 18px var(--head);letter-spacing:-.02em}
 .credit span{font:500 10px var(--mono);color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
 .credit p{margin:6px 0 0;color:var(--mute);font-size:14px}

@@ -102,24 +102,9 @@
   AG.steamUrl = function (m) { return m.steam ? 'https://steamcommunity.com/sharedfiles/filedetails/?id=' + m.steam : null; };
   AG.modUrl = function (m) { return '/Nexus/mods/' + m.id + '/'; };
 
-  var LIVE = /(^|\.)agrichex\.github\.io$/.test(location.hostname);
-  AG.count = function (path, title) {
-    if (!LIVE) return;
-    try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: path, title: title || path, event: true }); } catch (e) {}
-  };
-  function loadStats() {
-    if (!LIVE || document.getElementById('gc-count')) return;
-    window.goatcounter = { no_onload: false };
-    var s = document.createElement('script');
-    s.id = 'gc-count';
-    s.async = true;
-    s.setAttribute('data-goatcounter', 'https://agriche.goatcounter.com/count');
-    s.src = 'https://gc.zgo.at/count.js';
-    document.head.appendChild(s);
-  }
 
   AG.dlButton = function (m, big) {
-    var a = h('a', { class: 'btn pri', href: AG.dlUrl(m), onclick: function () { AG.count('download-' + m.id, 'Download ' + m.name); } },
+    var a = h('a', { class: 'btn pri', href: AG.dlUrl(m) },
       AG.icon('download'), h('span', null, AG.t('Download', 'Baixar') + (big ? ' ' + m.name : '')), h('small', null, 'v' + m.ver));
     return a;
   };
@@ -221,5 +206,5 @@
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function () { AG.boot(); loadStats(); });
+  document.addEventListener('DOMContentLoaded', function () { AG.boot(); });
 })();

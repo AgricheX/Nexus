@@ -543,7 +543,7 @@
           h('p', null, h('b', { text: 'WorldBox © Maxim Karpenko / MakoMako' }), ' · ', h('a', { href: 'https://www.superworldbox.com/', target: '_blank', rel: 'noopener', text: 'superworldbox.com' })),
           h('p', null, h('b', { text: 'RimWorld © Ludeon Studios' }), ' · ', h('a', { href: 'https://rimworldgame.com/', target: '_blank', rel: 'noopener', text: 'rimworldgame.com' })),
           h('p', { text: t('These are independent fan-made mods, not affiliated with or endorsed by the game developers. Characters and franchises shown in the mods belong to their owners.', 'Estes são mods independentes feitos por fãs, sem ligação oficial com os desenvolvedores dos jogos. Personagens e franquias dos mods pertencem aos seus donos.') }),
-          h('p', { text: t('The site counts visits and downloads anonymously, without cookies. Fonts: Space Grotesk, Inter and JetBrains Mono, via Google Fonts.', 'O site conta visitas e downloads de forma anônima, sem cookies. Fontes: Space Grotesk, Inter e JetBrains Mono, via Google Fonts.') }))),
+          h('p', { text: t('Fonts: Inter and JetBrains Mono, via Google Fonts.', 'Fontes: Inter e JetBrains Mono, via Google Fonts.') }))),
       h('div', { class: 'group' }, h('h3', { text: t('Bugs and questions', 'Bugs e dúvidas') }), discordBtn('discord.gg/s3EbgNSsJW')))));
   };
 
