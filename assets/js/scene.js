@@ -45,6 +45,7 @@
     this.c.width = this.W * d; this.c.height = this.H * d;
     this.tile = 6; this.tw = Math.ceil(this.W / this.tile); this.th = Math.ceil(this.H / this.tile);
     this.build();
+    if (this.actors && this.actors.length) this.fitWater();
   };
   Scene.prototype.land = function (tx, ty) {
     var cfg = this.cfg, n = this.hgt[ty * this.tw + tx], u = tx / this.tw, v = ty / this.th, lay = cfg.layout || 'coast';
@@ -117,7 +118,39 @@
     this.actors = (this.cfg.actors || []).map(function (a, k) {
       var o = {}; for (var p in a) o[p] = a[p];
       o.u = a.x; o.v = a.y; o.dir = a.vx < 0 ? -1 : 1; o.fi = 0; o.ft = Math.random() * 200; o.bob = Math.random() * 6; o.id = k;
+      if (o.water == null) o.water = /boat|ship|cruiser|freighter|carrier|submarine|swim|kots|galleon|frigate/i.test(a.sheet.s);
       return o;
+    });
+    this.fitWater();
+  };
+  Scene.prototype.waterAt = function (u, v, hv) {
+    return this.isWater(u, v) && this.isWater(u, v - hv) && this.isWater(u, v - hv * 0.5);
+  };
+  Scene.prototype.fitWater = function () {
+    var self = this, W = this.W, H = this.H, stp = 1 / this.tw;
+    this.actors.forEach(function (a) {
+      if (!a.water) return;
+      var sc = a.scale || 1, mu = (a.sheet.w * sc) / 2 / W + stp, hv = Math.max(stp, (a.sheet.h * sc) * 0.35 / H);
+      var best = null, vmin = (a.sheet.h * sc) / H + 0.12;
+      for (var dv = 0; dv <= 1; dv += 0.02) {
+        [a.y + dv, a.y - dv].forEach(function (v) {
+          if (best || v < vmin || v > 0.97) return;
+          var u0 = null;
+          for (var du = 0; du <= 1 && u0 === null; du += stp) {
+            if (a.x + du <= 1 && self.waterAt(a.x + du, v, hv)) u0 = a.x + du;
+            else if (a.x - du >= 0 && self.waterAt(a.x - du, v, hv)) u0 = a.x - du;
+          }
+          if (u0 === null) return;
+          var lo = u0, hi = u0;
+          while (lo - stp >= 0 && self.waterAt(lo - stp, v, hv)) lo -= stp;
+          while (hi + stp <= 1 && self.waterAt(hi + stp, v, hv)) hi += stp;
+          if (hi - lo > mu * 2 + 0.04) best = { v: v, lo: lo + mu, hi: hi - mu };
+        });
+        if (best) break;
+      }
+      if (!best) { a.hide = true; return; }
+      a.hide = false; a.v = best.v; a.range = [best.lo, best.hi];
+      if (a.u < best.lo || a.u > best.hi) a.u = Math.min(best.hi, Math.max(best.lo, a.x));
     });
   };
   Scene.prototype.loop = function (ts) {
@@ -158,7 +191,7 @@
     var list = this.actors.slice().sort(function (a, b) { return (a.layer || 0) - (b.layer || 0) || a.v - b.v; });
     for (var k = 0; k < list.length; k++) {
       var a = list[k], sh = a.cur || a.sheet, img = this.imgs[sh.s];
-      if (!img || !img.width) continue;
+      if (!img || !img.width || a.hide) continue;
       var sc = (a.scale || 1), w = sh.w * sc, h = sh.h * sc, fx = (a.fi % sh.n) * sh.w;
       var x = a.u * W - w / 2, y = a.v * H - h + (a.bobs ? Math.sin(t * 2 + a.bob) * 1.5 : 0);
       g.imageSmoothingEnabled = sc < 1;
