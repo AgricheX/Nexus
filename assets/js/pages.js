@@ -64,7 +64,7 @@
   }
 
   function card(m) {
-    var art = m.cover ? spr(m.cover, 200, 104, m.name) : h('img', { class: 'icon', src: m.icon, alt: '' });
+    var art = h('img', { class: 'icon', src: m.icon, alt: m.name, onload: function (e) { if (e.target.naturalWidth > 160) e.target.classList.add('hd'); } });
     return h('a', { class: 'card reveal', href: AG.modUrl(m), 'data-game': m.game, 'data-gen': m.gen || null },
       h('span', { class: 'bar' }),
       h('div', { class: 'art' }, art),

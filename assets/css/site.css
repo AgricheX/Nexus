@@ -112,7 +112,8 @@ section{padding:64px 0}
 .card:hover{border-color:#555}
 .card .bar{display:none}
 .card .art{height:150px;display:grid;place-items:center;background:#0d0d0d;border-bottom:1px solid var(--line);overflow:hidden}
-.card .art img.icon{max-height:84px;border-radius:14px;image-rendering:pixelated}
+.card .art img.icon{width:96px;height:96px;object-fit:contain;border-radius:18px;image-rendering:pixelated;box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06)}
+.card .art img.icon.hd{image-rendering:auto}
 .card .bd{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
 .card .bd h3{margin:0;display:flex;align-items:center;gap:9px}
 .card .bd h3 img.mini{width:20px;height:20px;border-radius:5px;image-rendering:pixelated}
