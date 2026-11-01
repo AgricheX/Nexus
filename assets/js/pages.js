@@ -23,7 +23,8 @@
     var p = []; for (var k in o) if (o[k]) p.push(k + '=' + encodeURIComponent(o[k]));
     history.replaceState(null, '', location.pathname + (p.length ? '?' + p.join('&') : '') + location.hash);
   }
-  function title(s) { document.title = s ? s + ' · Agriche Nexus' : 'Agriche Nexus · WorldBox & RimWorld mods'; }
+  var BASE_TITLE = document.title;
+  function title(s) { if (!BASE_TITLE || document.body.getAttribute('data-page') === 'notfound') document.title = s ? s + ' · Agriche Nexus' : 'Agriche Nexus · WorldBox & RimWorld mods'; }
   function ext(href, kids, cls) { return h('a', { class: cls || 'btn', href: href, target: '_blank', rel: 'noopener' }, kids); }
   function mods() { return AG.mods || []; }
   function gameName(g) { return (AG.GAMES[g] || {}).name || g; }
