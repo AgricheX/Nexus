@@ -367,7 +367,8 @@
         h('p', { class: 'mute', text: L(m.about) }),
         h('div', { class: 'ctas' }, AG.dlButton(m, false),
           ext(AG.repoUrl(m), [AG.icon('github'), h('span', { text: 'GitHub' })]),
-          m.steam ? ext(AG.steamUrl(m), [AG.icon('steam'), h('span', { text: 'Steam' })]) : null),
+          m.steam ? ext(AG.steamUrl(m), [AG.icon('steam'), h('span', { text: 'Steam' })]) : null,
+          m.gb ? ext('https://gamebanana.com/mods/' + m.gb, [AG.icon('external'), h('span', { text: 'GameBanana' })]) : null),
         notices),
       right)));
 
