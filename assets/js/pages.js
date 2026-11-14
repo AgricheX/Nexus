@@ -288,7 +288,7 @@
         if (e.w == null) { el.style.inset = '0'; return el; }
         return place(el, e, bw, bh);
       }
-      if (e.k === 'hb') { el = h('div', { class: 'gwhb' }); el.style.inset = '0'; return el; }
+      if (e.k === 'hb') { el = h('div', { class: 'gwhb' }); if (e.w == null) { el.style.inset = '0'; return el; } return place(el, e, bw, bh); }
       if (e.k === 'r') {
         el = place(h('div', { class: 'gwr' }), e, bw, bh); el.style.background = e.c;
         if (e.rad) el.style.borderRadius = (e.rad * S) + 'px';
@@ -307,7 +307,7 @@
         el = place(h('div', { class: 'gwimg' }), e, bw, bh);
         if (e.src) el.appendChild(h('img', { src: e.src, alt: '', loading: 'lazy' }));
         else el.appendChild(aic(e.ic, Math.min(e.w, e.h) * S, e.h * S)).style.left = ((e.w - Math.min(e.w, e.h)) / 2 * S) + 'px';
-        if (e.c) el.style.opacity = '.8';
+        if (e.c) el.classList.add('dim');
         return el;
       }
       if (e.k === 'bar') {
@@ -317,8 +317,8 @@
         return el;
       }
       if (e.k === 'b') {
-        el = place(h('div', { class: 'gwb fr' + (e.fr == null ? 'd' : e.fr) + (e.ghost ? ' ghost' : '') + (e.go != null ? ' go' : '') }), e, bw, bh);
-        el.style.setProperty('--tint', e.bg || '#ffffff');
+        el = place(h('div', { class: 'gwb fr' + (e.fr == null ? 'd' : e.fr) + (e.ghost ? ' ghost' : '') + (e.go != null || e.win ? ' go' : '') + (e.dim ? ' dim' : '') }), e, bw, bh);
+        if (e.bg && e.bg.indexOf('rgba') === 0) el.classList.add('fr0'); else el.style.setProperty('--tint', e.bg || '#ffffff');
         var hasT = e.s != null && L(e.s) !== '';
         if (e.ic != null) {
           var isz = hasT ? Math.min(e.h - 4, 16) * S : Math.min(e.w, e.h) * 0.78 * S;
@@ -327,6 +327,7 @@
         }
         if (hasT) { var bt = h('span', { class: 'gwbt' + (e.ic != null ? ' wi' : ''), html: rich(L(e.s)) }); bt.style.fontSize = (Math.min(9, e.h * 0.5) * S) + 'px'; el.appendChild(bt); }
         if (e.go != null) el.addEventListener('click', function () { tipHide(); view = e.go; draw(); });
+        if (e.win) el.addEventListener('click', function () { openWin(e.win); });
         return tipOn(el, e.tip);
       }
       return h('div');
@@ -337,10 +338,28 @@
         while ((t.scrollWidth > t.clientWidth + 1 || t.scrollHeight > t.clientHeight + 2) && fs > min && n++ < 12) { fs -= 0.5 * S; t.style.fontSize = fs + 'px'; }
       });
     }
+    function openWin(id) {
+      for (var i = 0; i < g.items.length; i++) if (g.items[i].id === id) { tipHide(); cur = i; view = 0; draw(); return; }
+    }
+    function sideCol(w) {
+      var col = h('div', { class: 'gwside' });
+      col.style.paddingTop = (26 * S) + 'px';
+      w.side.forEach(function (sd) {
+        if (sd.gap) { col.appendChild(h('span', { class: 'gwsgap' })).style.height = (sd.gap * S) + 'px'; return; }
+        var b = h('div', { class: 'gwb fr2' + (sd.win ? ' go' : '') });
+        b.style.cssText = 'position:relative;width:' + (22 * S) + 'px;height:' + (22 * S) + 'px;margin:0 0 ' + (2 * S) + 'px ' + (1 * S) + 'px';
+        if (sd.on) b.style.setProperty('--tint', '#FFD15C');
+        var ii = aic(sd.ic, 22 * S * 0.78, 22 * S * 0.78); ii.classList.add('c'); b.appendChild(ii);
+        if (sd.win) b.addEventListener('click', function () { openWin(sd.win); });
+        col.appendChild(tipOn(b, sd.tip));
+      });
+      return col;
+    }
     function draw() {
       var w = g.items[cur], v = w.views[Math.min(view, w.views.length - 1)];
-      var avail = stage.clientWidth || 460, cw = w.phone ? 196 : 230;
-      S = Math.max(1.2, Math.min(2, (avail - 8) / cw));
+      var cwid = 0; v.forEach(function (b) { cwid = Math.max(cwid, b.w || 214); });
+      var avail = stage.clientWidth || 460, cw = w.phone ? 196 : w.bare ? cwid + 4 : cwid + (cwid > 214 ? 10 : 16) + (w.side ? 26 : 0);
+      S = Math.max(cwid > 214 ? 1 : 1.2, Math.min(2, (avail - 8) / cw));
       stage.innerHTML = '';
       var body = h('div', { class: 'gwbody' });
       v.forEach(function (b) {
@@ -351,16 +370,30 @@
       });
       var win;
       if (w.phone) {
-        body.classList.add('ph'); win = h('div', { class: 'gwphone' }, h('span', { class: 'gwnotch' }), h('span', { class: 'gwx', text: '✖' }), body);
+        body.classList.add('ph'); win = h('div', { class: 'gwphone' }, h('span', { class: 'gwnotch' }), h('span', { class: 'gwx' }), body);
+      } else if (w.bare) {
+        body.classList.add('bare'); win = h('div', { class: 'gw bare b' + band }, body);
       } else {
-        body.style.padding = (6 * S) + 'px ' + (8 * S) + 'px ' + (8 * S) + 'px';
+        body.style.padding = (6 * S) + 'px ' + ((cwid > 214 ? 4 : 8) * S) + 'px ' + (8 * S) + 'px';
         body.style.setProperty('--gap', (3 * S) + 'px');
-        win = h('div', { class: 'gw' }, h('div', { class: 'gwtitle' }, h('span', { text: L(w.t) }), h('span', { class: 'gwx', text: '✖' })), body);
+        win = h('div', { class: 'gw b' + band }, h('div', { class: 'gwtitle' }, h('span', { text: L(w.t) }), h('span', { class: 'gwx' })), body);
       }
       win.style.setProperty('--s', S);
-      stage.appendChild(win);
+      if (w.side) { var row = h('div', { class: 'gwrow b' + band }, sideCol(w), win); row.style.setProperty('--s', S); stage.appendChild(row); }
+      else stage.appendChild(win);
+      stage.classList.toggle('wide', cw * S > avail);
       requestAnimationFrame(function () { fit(win); });
-      [].forEach.call(list.children, function (c, i) { c.classList.toggle('on', i === cur); });
+      [].forEach.call(list.querySelectorAll('.gwbtn'), function (c, i) { c.classList.toggle('on', i === cur); });
+    }
+    var band = g.band == null ? 2 : g.band;
+    if (g.bands) {
+      var sw = h('div', { class: 'gwbands' }, h('span', { text: L(g.bt) }));
+      g.bands.forEach(function (bd, i) {
+        var d = h('button', { class: 'gwsw' + (i === band ? ' on' : ''), 'aria-label': L(bd.t), onclick: function () { band = i; [].forEach.call(sw.querySelectorAll('.gwsw'), function (x, j) { x.classList.toggle('on', j === i); }); if (started) draw(); } });
+        d.style.background = bd.c;
+        sw.appendChild(tipOn(d, { n: bd.t }));
+      });
+      list.appendChild(sw);
     }
     g.items.forEach(function (w, i) {
       list.appendChild(tipOn(h('button', { class: 'gwbtn', onclick: function () { tipHide(); cur = i; view = 0; draw(); } }, at ? aicon(at, w.ic, 32) : null, h('span', { text: L(w.t) })), { n: w.bn, d: w.bd }));
